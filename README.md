@@ -10,7 +10,7 @@
 
 
 ## Download Sentinel-1 images with Python
-The sentinel_download module can be used to find only the images you need, and subsequently to download them. Firstly, searching through images.
+The sentinel_download module can be used to find the images you need and subsequently to download them. 
 ```python
 #decide area, time, and level
 with Sentinel_metadata() as met:
@@ -24,7 +24,7 @@ met.show_cross_pol()
 <img src="figs/slc_thumn.png" width="750" align="center">
 
 
-We can now download the image we want, for instance the third and fourth
+We can now download the images we want, for instance the third and fourth
 ```python
 with Satellite_download(met.products_df[2:3]) as dwl:
     #if we want to download only the thumbnails
