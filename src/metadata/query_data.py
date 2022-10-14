@@ -1,5 +1,5 @@
 from sentinelsat import SentinelAPI
-from sentinel_download._utilities import add_mgcs
+from ._utilities import add_mgcs
 
 
 

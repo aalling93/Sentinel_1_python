@@ -1,0 +1,16 @@
+# You need Python3..
+
+# external requirements
+python-dotenv>=0.5.1
+numpy
+geopandas
+mgrs #should remove later...
+scikit-learn
+scipy
+cartopy
+rasterio # should avoid in future
+Pillow
+pandas
+sentinelsat
+matplotlib
+  

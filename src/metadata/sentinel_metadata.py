@@ -1,8 +1,8 @@
-from sentinel_download import _filters as filt
-from sentinel_download import _masking as mask
-from sentinel_download import _show as show
-from sentinel_download import _utilities as util
-from sentinel_download import query_data as q
+
+from ._masking import *
+from ..visualize import show
+from ._utilities import *
+from .query_data import *
 import getpass
 
 class Sentinel_metadata:
@@ -40,14 +40,14 @@ class Sentinel_metadata:
         # getting metadata
 
         if sensor.lower() in ["s1_slc", "sentinel1_slc", "sentinel-1_slc"]:
-            self.products_df = q.get_s1_slc_metadata_area(
+            self.products_df = get_s1_slc_metadata_area(
                 self.bbox, self.USERNAME, self.PASSWORD, start_data, end_date
             )
             self.sensor = "sentinel_1_slc"
 
         if sensor.lower() in ["s1_raw", "sentinel1_level0", "s1_l0", "raw"]:
             try:
-                self.products_df = q.get_s1_raw_metadata_area(
+                self.products_df = get_s1_raw_metadata_area(
                     self.bbox, self.USERNAME, self.PASSWORD, start_data, end_date
                 )
             except:
@@ -55,12 +55,12 @@ class Sentinel_metadata:
             self.sensor = "sentinel_1_raw"
 
         elif sensor.lower() in ["s1_grd", "sentinel1_grd", "sentinel-1_grd"]:
-            self.products_df = q.get_s1_grd_metadata_area(
+            self.products_df = get_s1_grd_metadata_area(
                 self.bbox, self.USERNAME, self.PASSWORD, start_data, end_date
             )
             self.sensor = "sentinel_1_grd"
         elif sensor.lower() in ["s2_l1c", "sentinel2_l1c", "sentinel-2_l1c"]:
-            self.products_df = q.get_s2_metadata_area(
+            self.products_df = get_s2_metadata_area(
                 self.bbox, self.USERNAME, self.PASSWORD, start_data, end_date
             )
             self.sensor = "sentinel_2_l1c"
@@ -72,7 +72,7 @@ class Sentinel_metadata:
     def area(self, bbox: list = []):
         # getting area
         """lonmin, lonmax, latmin,latmax"""
-        self.bbox = util.get_area(bbox)
+        self.bbox = get_area(bbox)
 
         return self
 
@@ -107,9 +107,9 @@ class Sentinel_metadata:
             return None
 
     def land(self):
-        self.products_df = mask.inland(self.products_df)
+        self.products_df = inland(self.products_df)
     def water(self):
-        self.products_df = mask.inwater(self.products_df)
+        self.products_df = inwater(self.products_df)
 
     def plot_image_areas(self):
         show.plot_polygon(self.products_df)

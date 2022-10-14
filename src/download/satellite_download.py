@@ -2,14 +2,15 @@
 
 from .download_s1grd import *
 from ._utilities_dwl import * 
+import os 
 
 
 class Satellite_download:
     def __init__(self, metadata=None):
         super(Satellite_download, self).__init__()
 
-        self.PASSWORD = "ntm22xrm"
-        self.USERNAME = "aalling93"
+        self.PASSWORD = os.getenv('COPERNICUS_HUP_PASSWORD')
+        self.USERNAME = os.getenv('COPERNICUS_HUP_USERNAME')
         self.products_df = metadata
 
     def __enter__(self):
@@ -20,6 +21,7 @@ class Satellite_download:
 
 
     def download_sentinel_1(self,data_folder: str = "sentinel_images"):
+        
         if self.products_df.shape[0]>0:
             download_sentinel_1_function(self.products_df,data_folder)
         else:

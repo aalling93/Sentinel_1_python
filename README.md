@@ -1,6 +1,13 @@
 
 <img src="figs/s1.gif" width="750" align="center">
 
+[![DOI](https://zenodo.org/badge/259046250.svg)](https://zenodo.org/badge/latestdoi/259046250) 
+[![Coverage Status](https://coveralls.io/repos/github/aalling93/Sentinel_1_python/badge.svg?branch=main)](https://coveralls.io/github/aalling93/Sentinel_1_python?branch=main)
+[![Build Status](https://app.travis-ci.com/aalling93/Sentinel_1_python.svg?branch=master)](https://app.travis-ci.com/aalling/Sentinel_1_python) 
+![Repo Size](https://img.shields.io/github/repo-size/aalling93/Sentinel_1_python) 
+[![Known Vulnerabilities](https://snyk.io/test/github/aalling93/Sentinel_1_python//badge.svg)](https://snyk.io/test/github/aalling93/Sentinel_1_python/)
+![Python](https://img.shields.io/badge/python-3.9-blue.svg)
+
 
 
 ## Introduction <a class="anchor" id="intro"></a>

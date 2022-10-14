@@ -26,6 +26,19 @@ abort = False
 # A routine that handles trapped signals
 
 
+def get_download_name(gpd):
+    try:
+        name = gpd.identifier.split("_")
+        if gpd.producttype == "GRD":
+            dwl_link = f"https://datapool.asf.alaska.edu/GRD_HD/S{name[0][-1]}/{gpd.identifier}.zip"
+        else:
+            dwl_link = f"https://datapool.asf.alaska.edu/{name[2]}/S{name[0][-1]}/{gpd.identifier}.zip"
+
+        return dwl_link
+    except Exception as e:
+        print(e)
+        pass
+
 
 
 class bulk_downloader:

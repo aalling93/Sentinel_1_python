@@ -5,7 +5,7 @@ import geopandas as gpd
 import requests
 
 from .download_s1grd import bulk_downloader
-
+from .._general_util import unzip_path
 
 def signal_handler(sig, frame):
     global abort
@@ -14,34 +14,26 @@ def signal_handler(sig, frame):
     raise SystemExit  # this will only abort the thread that the ctrl+c was caught in
 
 
-def get_download_name(gpd):
-    try:
-        name = gpd.identifier.split("_")
-        if gpd.producttype == "GRD":
-            dwl_link = f"https://datapool.asf.alaska.edu/GRD_HD/S{name[0][-1]}/{gpd.identifier}.zip"
-        else:
-            dwl_link = f"https://datapool.asf.alaska.edu/{name[2]}/S{name[0][-1]}/{gpd.identifier}.zip"
-
-        return dwl_link
-    except Exception as e:
-        print(e)
-        pass
-
 
 def download_sentinel_1_function(
     gdf: gpd.geodataframe.GeoDataFrame = None, data_folder: str = "sentinel_images"
 ):
-    path = os.getcwd()
 
+    original_path = os.getcwd()
+    
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
-        os.chdir(data_folder)
 
+    os.chdir(data_folder)
     if "sentinel-1" in gdf.platformname.iloc[0].lower():
         downloader = bulk_downloader(gdf)
         downloader.download_files()
         downloader.print_summary()
-    os.chdir(path)
+
+    
+
+    os.chdir(original_path)
+    unzip_path(data_folder)
 
 
 def download_thumbnails_function(
