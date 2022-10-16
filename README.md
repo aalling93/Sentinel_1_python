@@ -2,7 +2,7 @@
 <img src="figs/s1.gif" width="750" align="center">
 
 [![DOI](https://zenodo.org/badge/259046250.svg)](https://zenodo.org/badge/latestdoi/259046250) 
-[![Coverage Status](https://coveralls.io/repos/github/aalling93/Sentinel_1_python/badge.svg?branch=main)](https://coveralls.io/github/aalling93/Sentinel_1_python?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/aalling93/Sentinel_1_python/badge.svg)](https://coveralls.io/github/aalling93/Sentinel_1_python)
 ![Repo Size](https://img.shields.io/github/repo-size/aalling93/Sentinel_1_python) 
 [![Known Vulnerabilities](https://snyk.io/test/github/aalling93/Sentinel_1_python//badge.svg)](https://snyk.io/test/github/aalling93/Sentinel_1_python/)
 ![Python](https://img.shields.io/badge/python-3.9-blue.svg)
@@ -11,7 +11,8 @@
 
 ## Introduction <a class="anchor" id="intro"></a>
 
-This is a Python module for working with Sentinel-1 satellite images, purly in Python. It allows you to find the images you want, download them and work with them (calibrate, speckle fitler etc.)..
+This is a Python module for working with Sentinel-1 satellite images, purly in Python. It allows you to find the images you want, download them and work with them (calibrate, speckle fitler etc.).. I use the SentinelSAT package for the metadata. The data is then downloaded from NASA ASF. 
+
 
 
 
@@ -33,9 +34,6 @@ This is a Python module for working with Sentinel-1 satellite images, purly in P
 The sentinel_download module can be used to find the images you need and subsequently to download them. 
 ```python
 #decide area, time, and level
-with Sentinel_metadata() as met:
-    met.area([5,10,55,60])
-    met.get_metadata('slc',start_data='20220109',end_date='20220512')
 # filter the data, e.g., only iw, vv, etc etc.
 met.iw()
 # Check the images before downloading 
@@ -47,10 +45,7 @@ met.show_cross_pol()
 We can now download the images we want, for instance the third and fourth
 ```python
 with Satellite_download(met.products_df[2:3]) as dwl:
-    #if we want to download only the thumbnails
-    dwl.download_thumbnails(folder='') 
-    #if we want to download the entire image (grd, slc, or raw)
-    dwl.download_sentinel_1(folder='')
+
 ```
 
 And voila. You have now downloaded the images.
@@ -60,7 +55,7 @@ And voila. You have now downloaded the images.
 Go back to [Table of Content](#content)
 
 
-### Load Sentinel-1 level-0 <a class="anchor" id="level0"></a>
+### Load Sentinel-1 level-0 in python<a class="anchor" id="level0"></a>
 
 ### Load Sentinel-1 SLC <a class="anchor" id="slc"></a>
 

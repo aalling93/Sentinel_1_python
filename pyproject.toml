@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
+
+[project]
+name = "sentinel_1_python"
+version = "0.0.4"
+authors = [
+  { name="Aalling93", email="kaaso@space.dtu.dk" },
+]
+description = "Work with Sentinel-1 SAR images in Python: Get Metadata, Filter info, Download images, Load and Calibrate images and a bunch of other things."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+
+
+[project.urls]
+"Homepage" = "https://github.com/aalling93/Sentinel_1_python"
