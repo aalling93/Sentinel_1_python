@@ -5,11 +5,16 @@ from .download_s1grd import *
 
 
 class Satellite_download:
-    def __init__(self, metadata=None):
+    def __init__(
+        self,
+        metadata=None,
+        password=os.getenv("COPERNICUS_HUP_PASSWORD"),
+        username=os.getenv("COPERNICUS_HUP_USERNAME"),
+    ):
         super(Satellite_download, self).__init__()
 
-        self.PASSWORD = os.getenv("COPERNICUS_HUP_PASSWORD")
-        self.USERNAME = os.getenv("COPERNICUS_HUP_USERNAME")
+        self.PASSWORD = password
+        self.USERNAME = username
         self.products_df = metadata
 
     def __enter__(self):
