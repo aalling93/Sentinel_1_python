@@ -114,6 +114,7 @@ We can then see then extent of the images.
 <img src="figs/extent.png" width="450" align="center">
 
 And display the images before downloading them...
+
 <img src="figs/slc_thumn.png" width="450" align="center">
 
 4. Download the images
