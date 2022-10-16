@@ -17,6 +17,9 @@ kaaso@space.dtu.dk
 
 This is a Python module for working with Sentinel-1 satellite images, purly in Python. It allows you to find the images you want, download them and work with them (calibrate, speckle fitler etc.).. I use the SentinelSAT package for the metadata. The data is then downloaded from NASA ASF. 
 
+Why? Because I don't to work with ESA SNAP. Also, in this was it is easier to have my entire workflow in Python.. 
+
+I make no guarantees for the quality, security or anything. Use it as you wish. 
 
 
 
@@ -55,7 +58,7 @@ This is a Python module for working with Sentinel-1 satellite images, purly in P
 # Install and Run
  <a class="anchor" id="Install-and-Run"></a>
 
-This repo can be installed using either git clone OR pypi.. Currently, I have only placed in pypi-test, so lets hope it stays there..
+This repo can be installed using either git clone OR pypi.. Currently, I have only placed it in pypi-test, so lets hope it stays there..
 
 
 **Using Pypi**
@@ -70,7 +73,7 @@ python3 -m pip install sentinel-1-python --extra-index-url=https://test.pypi.org
 
 **Using clone**
 
- 1.  Install all requirments
+ 1.  Install all requirements
 
  2. Clone 
  ```
@@ -138,6 +141,9 @@ img = img.boxcar(5) #could easily make, e.g., a Lee filter..
 img.simple_plot(band_index=0)
 ```
 
+<img src="figs/calibrate.png" width="450" align="center">
+
+
 we can now exctract a region of the image, defined by either index or coordinate set.
 ```python
 indx = img.get_index(lat=57.0047,long=19.399)
@@ -147,7 +153,7 @@ img[indx[0]-125:indx[0]+125,indx[1]-125:indx[1]+125].simple_plot(band_index=1)
 
 ------------
 
-<img src="figs/calibrate.png" width="450" align="center">
+
 
 ## SAR satellites <a class="anchor" id="sar"></a>
 Go back to [Table of Content](#content)
@@ -207,7 +213,8 @@ Eigil Lippert
  # Licence
 See License file. In short:
 
-1. Cite me in your work! something like: Kristian Aalling Sørensen, 2022, kaaso@space.dtu.dk
+1. Cite me in your work! something like: 
+Kristian Aalling Sørensen (2020) sentinel_1_python [Source code]. https://github.com/aalling93/sentinel_1_python. email: kaaso@space.dtu.dk
 2. Get as many as possible to follow me on Github. You and your colleagues who use this at the very least. I am a like-hunter. 
 3. Star this repository, conditioned to the same as above.
 4. Maybe write me an email or two, telling me how amazing job I did?
