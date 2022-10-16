@@ -8,12 +8,23 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+.dist
+dist/
 build/
 .coveralls.yml
 .coveralls
 .env
 data/
 .env/
+pyproject.toml
+pyproject
+setup.py
+.setup.py
+.coveralls.yml
+coveralls.yml
+.gitattributes
+.dccache
+
 data
 develop-eggs/
 dist/
