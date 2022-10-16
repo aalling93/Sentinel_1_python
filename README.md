@@ -1,15 +1,19 @@
 
 <img src="figs/s1.gif" width="750" align="center">
 
-[![DOI](https://zenodo.org/badge/259046250.svg)](https://zenodo.org/badge/latestdoi/259046250) 
 [![Coverage Status](https://coveralls.io/repos/github/aalling93/Sentinel_1_python/badge.svg)](https://coveralls.io/github/aalling93/Sentinel_1_python)
 ![Repo Size](https://img.shields.io/github/repo-size/aalling93/Sentinel_1_python) 
 [![Known Vulnerabilities](https://snyk.io/test/github/aalling93/Sentinel_1_python//badge.svg)](https://snyk.io/test/github/aalling93/Sentinel_1_python/)
 ![Python](https://img.shields.io/badge/python-3.9-blue.svg)
 
 
+Kristian Aalling Sørensen
 
-## Introduction <a class="anchor" id="intro"></a>
+kaaso@space.dtu.dk
+
+# Brief Description
+<a class="anchor" id="intro"></a>
+
 
 This is a Python module for working with Sentinel-1 satellite images, purly in Python. It allows you to find the images you want, download them and work with them (calibrate, speckle fitler etc.).. I use the SentinelSAT package for the metadata. The data is then downloaded from NASA ASF. 
 
@@ -17,55 +21,133 @@ This is a Python module for working with Sentinel-1 satellite images, purly in P
 
 
 
-## Content <a class="anchor" id="content"></a>
-*  [Download Sentinel-1 images with Python](#dwl)
 
+
+# Table Of Contents
+<a class="anchor" id="content"></a>
+
+-  [Introduction](#Introduction)
+-  [Requirements](#Requirements)
+-  [Install and Run](#Install-and-Run)
 *  [Use Sentinel-1 images in Python](#use)
-    *  [Load Sentinel-1 GRD](#grd)
-
-    *  [Decode Sentinel-1 level-0](#decode)
-    *  [Calibrate Sentinel-1 GRD](#calibrate)
-
-
 *  [SAR, briefly](#sar)
+-  [Acknowledgments](#Acknowledgments)
 
 
-## Download Sentinel-1 images with Python <a class="anchor" id="dwl"></a>
-The sentinel_download module can be used to find the images you need and subsequently to download them. 
-```python
-#decide area, time, and level
-# filter the data, e.g., only iw, vv, etc etc.
-met.iw()
-# Check the images before downloading 
-met.show_cross_pol()
-```
-<img src="figs/slc_thumn.png" width="750" align="center">
+
+# Requirements
+ <a class="anchor" id="Requirements"></a>
+
+- [numpy](https://github.com/numpy) 
+- [geopandas](https://github.com/geopandas) 
+- [gdal](https://github.com/geopandas) 
+- [mgrs](https://github.com/mgrs)  (should be removed in later version.. sry..)
+- [scikit-learn](https://github.com/scikit-learn) (should be removed in later version.. sry..)
+- [scipy](https://github.com/scipy) (should be removed in later version.. sry..)
+- [cartopy](https://github.com/cartopy) 
+- [rasterio](https://github.com/rasterio) 
+- [Pillow](https://github.com/Pillow) 
+- [pandas](https://github.com/pandas) 
+- [sentinelsat](https://github.com/sentinelsat) 
+- [matplotlib](https://github.com/matplotlib) 
 
 
-We can now download the images we want, for instance the third and fourth
-```python
-with Satellite_download(met.products_df[2:3]) as dwl:
+# Install and Run
+ <a class="anchor" id="Install-and-Run"></a>
 
-```
+This repo can be installed using either git clone OR pypi.. Currently, I have only placed in pypi-test, so lets hope it stays there..
 
-And voila. You have now downloaded the images.
+
+**Using Pypi**
+
+ 1.  GDAL. Make sure your gdal bindings are working... 
+
+ 2. Install sentinel_1_python using pypy test
+ ```
+python3 -m pip install sentinel-1-python --extra-index-url=https://test.pypi.org/simple/
+ ```
+
+
+**Using clone**
+
+ 1.  Install all requirments
+
+ 2. Clone 
+ ```
+ git clone https://github.com/aalling93/sentinel_1_python.git
+
+ ```
+
+
+
 
 
 ## Use Sentinel-1 images in Python <a class="anchor" id="use"></a>
 Go back to [Table of Content](#content)
 
+1. Get metadata of images
+------------
 
-### Load Sentinel-1 level-0 in python<a class="anchor" id="level0"></a>
+```python
+with Sentinel_metadata() as met:
+    met.area([29.9,21,56.7,58])
+    met.get_metadata(sensor='s1_slc',start_data='20220109',end_date='20221010')
+```
 
-### Load Sentinel-1 SLC <a class="anchor" id="slc"></a>
-
-### Sentinel-1 GRD <a class="anchor" id="grd"></a>
-
-### Sentinel-1 calibrate <a class="anchor" id="calibrate"></a>
-
-### Decode Sentinel-1 level-0 <a class="anchor" id="decode"></a>
+2. Filter the images if you want
+----------------
+```python
+met.iw() #filer so we only have IW
+```
 
 
+3. Displaying the images before download:
+```python
+met.plot_image_areas() # Showing extent of images
+met.show_cross_pol(4)
+```
+We can then see then extent of the images.
+
+<img src="figs/extent.png" width="450" align="center">
+
+And display the images before downloading them...
+<img src="figs/slc_thumn.png" width="450" align="center">
+
+4. Download the images
+--------------
+```python
+folder = f'{os.getenv("raw_data_dir")}/slc_sweden'
+with Satellite_download(met.products_df) as dwl:
+    os.makedirs(folder, exist_ok=True)
+    #save metadata
+    dwl.products_df.to_pickle(f'{folder}/slc_dataframe.pkl')
+    #download the thumbnails
+    dwl.download_thumbnails(folder=f'{folder}/slc_thumbnails') 
+    #download the slc images in .zip format and extract to .SAFE format..
+    dwl.download_sentinel_1(f'{folder}/slc')
+```
+
+
+5. Load, calibrate, speckle filter image in python
+
+```python
+image_paths = glob.glob(f'{os.getenv("raw_data_dir")}/*/*/*.SAFE')
+img = s1_load(image_paths[0])
+img =img.calibrate(mode='gamma') # could also use, e.g., 'sigma_0' 
+img = img.boxcar(5) #could easily make, e.g., a Lee filter..
+img.simple_plot(band_index=0)
+```
+
+we can now exctract a region of the image, defined by either index or coordinate set.
+```python
+indx = img.get_index(lat=57.0047,long=19.399)
+img[indx[0]-125:indx[0]+125,indx[1]-125:indx[1]+125].simple_plot(band_index=1)
+```
+
+
+------------
+
+<img src="figs/calibrate.png" width="450" align="center">
 
 ## SAR satellites <a class="anchor" id="sar"></a>
 Go back to [Table of Content](#content)
@@ -112,3 +194,21 @@ Double bounce scattering and occurs when the transmitted pulse is reflected spec
 Due to the geometry of the SAR and its moving platform, typical SAR imaging sensors are designed to take focused images with good resolution under the assumption that their target is stationary during image acquisition. This focusing can not be made on moving targets, and normal SAR instruments are therefore ill suited to detect fast moving objects, such as ships. The results is a well resolved static background and poorly resolved moving target. In non-cooperative surveillance tasks, this is a significant problem. Under the assumption that a target is moving perpendicular to the line of sight of the SAR with a constant acceleration, it is possible to reduce the problem by taking the doppler shift of the SAR images into consideration. Maritime vessels do not normally follow such patterns. Hence, more complex trajectory patterns must be accounted for when looking at ships with SAR instruments.
 
 In summary, using the capabilities of a SAR instrument, it should be possible to detect ships on the ocean surface. 
+
+
+
+
+# Acknowledgments
+ <a class="anchor" id="Acknowledgments"></a>
+Myself, 
+Simon Lupemba,
+Eigil Lippert
+
+ # Licence
+See License file. In short:
+
+1. Cite me in your work! something like: Kristian Aalling Sørensen, 2022, kaaso@space.dtu.dk
+2. Get as many as possible to follow me on Github. You and your colleagues who use this at the very least. I am a like-hunter. 
+3. Star this repository, conditioned to the same as above.
+4. Maybe write me an email or two, telling me how amazing job I did?
+5. Help me with improving the work. I am always looking for collaborators. 
