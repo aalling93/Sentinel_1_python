@@ -4,8 +4,9 @@ import sys
 import geopandas as gpd
 import requests
 
-from .download_s1grd import bulk_downloader
 from .._general_util import unzip_path
+from .download_s1grd import bulk_downloader
+
 
 def signal_handler(sig, frame):
     global abort
@@ -14,13 +15,12 @@ def signal_handler(sig, frame):
     raise SystemExit  # this will only abort the thread that the ctrl+c was caught in
 
 
-
 def download_sentinel_1_function(
     gdf: gpd.geodataframe.GeoDataFrame = None, data_folder: str = "sentinel_images"
 ):
 
     original_path = os.getcwd()
-    
+
     if not os.path.exists(data_folder):
         os.makedirs(data_folder)
 
@@ -29,8 +29,6 @@ def download_sentinel_1_function(
         downloader = bulk_downloader(gdf)
         downloader.download_files()
         downloader.print_summary()
-
-    
 
     os.chdir(original_path)
     unzip_path(data_folder)

@@ -2,7 +2,6 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 
-
 def calibration(band, rows, columns, calibration_values, tiles=4):
     """Calibrates image using linear interpolation.
     See https://sentinel.esa.int/documents/247904/685163/S1-Radiometric-Calibration-V1.0.pdf
@@ -27,14 +26,15 @@ def calibration(band, rows, columns, calibration_values, tiles=4):
     for i in range(tiles):
         column_end = int(column_max / tiles * (i + 1))
         # Create array of point where calibration is needed
-        column_mesh, row_mesh = np.meshgrid(np.array(range(column_start, column_end)), np.array(range(band.shape[0])))
+        column_mesh, row_mesh = np.meshgrid(
+            np.array(range(column_start, column_end)), np.array(range(band.shape[0]))
+        )
         points = np.array([row_mesh.reshape(-1), column_mesh.reshape(-1)]).T
         # Get the image tile and the calibration values for it
         img_tile = band[:, column_start:column_end]
         img_cal = f(points).reshape(img_tile.shape)
         # Set in result
-        result[:, column_start:column_end] = (img_tile / img_cal)
+        result[:, column_start:column_end] = img_tile / img_cal
 
         column_start = column_end
-    return result ** 2
-
+    return result**2

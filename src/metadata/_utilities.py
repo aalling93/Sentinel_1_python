@@ -62,15 +62,7 @@ def get_area(bbox: list = []):
     return footprint
 
 
-
-
-
-
 def original_metadata(self):
     self.products_df = self.org_products_df
 
     return self
-
-
-
-

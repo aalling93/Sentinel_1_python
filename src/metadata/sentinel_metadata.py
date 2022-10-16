@@ -1,16 +1,15 @@
-
 from ._masking import *
 from ..visualize import show
 from ._utilities import *
 from .query_data import *
 import getpass
 
+
 class Sentinel_metadata:
     """'"""
 
-    def __init__(self,fontsize:int=32):
+    def __init__(self, fontsize: int = 32):
         super(Sentinel_metadata, self).__init__()
-
 
         try:
             new_username = raw_input("Username for Copernicus Hub: ")
@@ -21,9 +20,6 @@ class Sentinel_metadata:
         self.USERNAME = new_username
         self.PASSWORD = new_password
 
-        
-
-
         show.initi(fontsize)
 
     def __enter__(self):
@@ -32,11 +28,10 @@ class Sentinel_metadata:
     def __exit__(self, exception_type, exception_value, traceback):
         pass
 
-
     def get_metadata(
         self, sensor: str = "s1_slc", start_data: str = "", end_date: str = ""
     ):
-       
+
         # getting metadata
 
         if sensor.lower() in ["s1_slc", "sentinel1_slc", "sentinel-1_slc"]:
@@ -76,7 +71,6 @@ class Sentinel_metadata:
 
         return self
 
-
     def show_thumnails(self, amount=10):
         show.show_thumbnail_function(
             self.products_df,
@@ -108,12 +102,12 @@ class Sentinel_metadata:
 
     def land(self):
         self.products_df = inland(self.products_df)
+
     def water(self):
         self.products_df = inwater(self.products_df)
 
     def plot_image_areas(self):
         show.plot_polygon(self.products_df)
-
 
     def cloud_cover(self, cloud_cover: float = 1):
         if self.sensor in ["sentinel_2_l1c", "sentinel_2_l2a"]:
@@ -121,13 +115,11 @@ class Sentinel_metadata:
                 self.products_df.cloudcoverpercentage < cloud_cover
             ]
 
-
     def vv(self):
         if self.sensor in ["sentinel_1_grd", "sentinel_1_slc", "sentinel_1_raw"]:
             self.products_df = self.products_df[
                 self.products_df.polarisationmode == "VV VH"
             ]
-
 
     def iw(self):
         if self.sensor in ["sentinel_1_grd", "sentinel_1_slc", "sentinel_1_raw"]:
@@ -135,20 +127,14 @@ class Sentinel_metadata:
                 self.products_df.sensoroperationalmode == "IW"
             ]
 
-
     def ew(self):
         if self.sensor in ["sentinel_1_grd", "sentinel_1_slc", "sentinel_1_raw"]:
             self.products_df = self.products_df[
                 self.products_df.sensoroperationalmode == "EW"
             ]
 
-
     def hh(self):
         if self.sensor in ["sentinel_1_grd", "sentinel_1_slc", "sentinel_1_raw"]:
             self.products_df = self.products_df[
                 self.products_df.polarisationmode == "HH HV"
             ]
-
-
-
-    

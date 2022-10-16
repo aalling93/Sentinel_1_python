@@ -12,7 +12,7 @@ from . import filters
 
 
 class SarImage:
-    """ Class to contain SAR image, relevant meta data and methods.
+    """Class to contain SAR image, relevant meta data and methods.
     Attributes:
         bands(list of numpy arrays): The measurements.
         mission(str): Mission name:
@@ -27,8 +27,19 @@ class SarImage:
         band_meta(list of dict): Dictionary with meta data for each band.
     """
 
-    def __init__(self, bands, mission=None, time=None, footprint=None, product_meta=None,
-                 band_names=None, calibration_tables=None, geo_tie_point=None, band_meta=None, unit=None):
+    def __init__(
+        self,
+        bands,
+        mission=None,
+        time=None,
+        footprint=None,
+        product_meta=None,
+        band_names=None,
+        calibration_tables=None,
+        geo_tie_point=None,
+        band_meta=None,
+        unit=None,
+    ):
 
         # assign values
         self.bands = bands
@@ -51,14 +62,14 @@ class SarImage:
 
         # Check i 2 dimension are given
         if len(key) != 2:
-            raise ValueError('Need to slice both column and row like test_image[:,:]')
+            raise ValueError("Need to slice both column and row like test_image[:,:]")
 
         # Get values as array
         if isinstance(key[0], int) & isinstance(key[1], int):
             return [band[key] for band in self.bands]
 
         if not isinstance(key[0], slice) & isinstance(key[1], slice):
-            raise ValueError('Only get at slice is supported: a[2,4] a[:10,3:34]')
+            raise ValueError("Only get at slice is supported: a[2,4] a[:10,3:34]")
 
         # Else. Try to slice the image
         slice_row = key[0]
@@ -97,26 +108,39 @@ class SarImage:
                 footprint_lat[2 * i + j] = lat_i
                 footprint_long[2 * i + j] = long_i
 
-        footprint = {'latitude': footprint_lat, 'longitude': footprint_long}
+        footprint = {"latitude": footprint_lat, "longitude": footprint_long}
 
         # Adjust geo_tie_point, calibration_tables
         n_bands = len(self.bands)
         geo_tie_point = copy.deepcopy(self.geo_tie_point)
         calibration_tables = copy.deepcopy(self.calibration_tables)
         for i in range(n_bands):
-            geo_tie_point[i]['row'] = (geo_tie_point[i]['row'] - row_start)/row_step
-            geo_tie_point[i]['column'] = (geo_tie_point[i]['column'] - column_start)/column_step
+            geo_tie_point[i]["row"] = (geo_tie_point[i]["row"] - row_start) / row_step
+            geo_tie_point[i]["column"] = (
+                geo_tie_point[i]["column"] - column_start
+            ) / column_step
 
-            calibration_tables[i]['row'] = (calibration_tables[i]['row'] - row_start)/row_step
-            calibration_tables[i]['column'] = (calibration_tables[i]['column'] - column_start)/column_step
+            calibration_tables[i]["row"] = (
+                calibration_tables[i]["row"] - row_start
+            ) / row_step
+            calibration_tables[i]["column"] = (
+                calibration_tables[i]["column"] - column_start
+            ) / column_step
 
         # slice the bands
         bands = [band[key] for band in self.bands]
 
-        return SarImage(bands, mission=self.mission, time=self.time,
-                        footprint=footprint, product_meta=self.product_meta,
-                        band_names=self.band_names, calibration_tables=calibration_tables,
-                        geo_tie_point=geo_tie_point, band_meta=self.band_meta)
+        return SarImage(
+            bands,
+            mission=self.mission,
+            time=self.time,
+            footprint=footprint,
+            product_meta=self.product_meta,
+            band_names=self.band_names,
+            calibration_tables=calibration_tables,
+            geo_tie_point=geo_tie_point,
+            band_meta=self.band_meta,
+        )
 
     def get_index(self, lat, long):
         """Get index of a location by interpolating grid-points
@@ -134,28 +158,34 @@ class SarImage:
 
         # find index for each band
         for i in range(len(geo_tie_point)):
-            lat_grid = geo_tie_point[i]['latitude']
-            long_grid = geo_tie_point[i]['longitude']
-            row_grid = geo_tie_point[i]['row']
-            column_grid = geo_tie_point[i]['column']
-            row[i], column[i] = get_functions.get_index_v2(lat, long, lat_grid, long_grid, row_grid, column_grid)
+            lat_grid = geo_tie_point[i]["latitude"]
+            long_grid = geo_tie_point[i]["longitude"]
+            row_grid = geo_tie_point[i]["row"]
+            column_grid = geo_tie_point[i]["column"]
+            row[i], column[i] = get_functions.get_index_v2(
+                lat, long, lat_grid, long_grid, row_grid, column_grid
+            )
 
         # check that the results are the same
-        if (abs(row.max() - row.min()) > 0.5) or (abs(column.max() - column.min()) > 0.5):
-            warnings.warn('Warning different index found for each band. First index returned')
+        if (abs(row.max() - row.min()) > 0.5) or (
+            abs(column.max() - column.min()) > 0.5
+        ):
+            warnings.warn(
+                "Warning different index found for each band. First index returned"
+            )
 
         return row[0], column[0]
 
     def get_coordinate(self, row, column):
         """Get coordinate from index by interpolating grid-points
-            Args:
-                row(number): index of the row of interest position
-                column(number): index of the column of interest position
-            Returns:
-                lat(float): Latitude of the position
-                long(float): longitude of the position
-            Raises:
-            """
+        Args:
+            row(number): index of the row of interest position
+            column(number): index of the column of interest position
+        Returns:
+            lat(float): Latitude of the position
+            long(float): longitude of the position
+        Raises:
+        """
 
         geo_tie_point = self.geo_tie_point
         lat = np.zeros(len(geo_tie_point), dtype=float)
@@ -163,38 +193,49 @@ class SarImage:
 
         # find index for each band
         for i in range(len(geo_tie_point)):
-            lat_grid = geo_tie_point[i]['latitude']
-            long_grid = geo_tie_point[i]['longitude']
-            row_grid = geo_tie_point[i]['row']
-            column_grid = geo_tie_point[i]['column']
-            lat[i], long[i] = get_functions.get_coordinate(row, column, lat_grid, long_grid, row_grid, column_grid)
+            lat_grid = geo_tie_point[i]["latitude"]
+            long_grid = geo_tie_point[i]["longitude"]
+            row_grid = geo_tie_point[i]["row"]
+            column_grid = geo_tie_point[i]["column"]
+            lat[i], long[i] = get_functions.get_coordinate(
+                row, column, lat_grid, long_grid, row_grid, column_grid
+            )
 
         # check that the results are the same
-        if (abs(lat.max() - lat.min()) > 0.001) or (abs(long.max() - long.min()) > 0.001):
-            warnings.warn('Warning different coordinates found for each band. Mean returned')
+        if (abs(lat.max() - lat.min()) > 0.001) or (
+            abs(long.max() - long.min()) > 0.001
+        ):
+            warnings.warn(
+                "Warning different coordinates found for each band. Mean returned"
+            )
 
         return lat.mean(), long.mean()
 
     def simple_plot(self, band_index=0, q_max=0.95, stride=1, **kwargs):
-        """ Makes a simple image of band and a color bar.
-            Args:
-                band_index(int): index of the band to plot.
-                q_max(number): q_max is the quantile used to set the max of the color range for example
-                                q_max = 0.95 shows the lowest 95 percent of pixel values in the color range
-                stride(int): Used to skip pixels when showing. Good for large images.
-                **kwargs: Passed on to matplotlib imshow
-            Returns:
-            Raises:
-            """
+        """Makes a simple image of band and a color bar.
+        Args:
+            band_index(int): index of the band to plot.
+            q_max(number): q_max is the quantile used to set the max of the color range for example
+                            q_max = 0.95 shows the lowest 95 percent of pixel values in the color range
+            stride(int): Used to skip pixels when showing. Good for large images.
+            **kwargs: Passed on to matplotlib imshow
+        Returns:
+        Raises:
+        """
         v_max = np.quantile(self.bands[band_index].reshape(-1), q_max)
 
-        plt.imshow(self.bands[band_index][::stride, ::stride],cmap='gray', vmax=v_max, **kwargs)
+        plt.imshow(
+            self.bands[band_index][::stride, ::stride],
+            cmap="gray",
+            vmax=v_max,
+            **kwargs
+        )
         plt.colorbar()
         plt.show()
 
         return
 
-    def calibrate(self, mode='gamma', tiles=4):
+    def calibrate(self, mode="gamma", tiles=4):
         """Get coordinate from index by interpolating grid-points
         Args:
             mode(string): 'sigma_0', 'beta' or 'gamma'
@@ -203,69 +244,93 @@ class SarImage:
             Calibrated image as (SarImage)
         Raises:
         """
-        if 'raw' not in self.unit:
-            warnings.warn('Raw is not in units. The image have all ready been calibrated')
-        
+        if "raw" not in self.unit:
+            warnings.warn(
+                "Raw is not in units. The image have all ready been calibrated"
+            )
+
         calibrated_bands = []
         for i, band in enumerate(self.bands):
-            row = self.calibration_tables[i]['row']
-            column = self.calibration_tables[i]['column']
+            row = self.calibration_tables[i]["row"]
+            column = self.calibration_tables[i]["column"]
             calibration_values = self.calibration_tables[i][mode]
-            calibrated_bands.append(tools.calibration(band, row, column, calibration_values, tiles=tiles))
+            calibrated_bands.append(
+                tools.calibration(band, row, column, calibration_values, tiles=tiles)
+            )
 
-        return SarImage(calibrated_bands, mission=self.mission, time=self.time,
-                        footprint=self.footprint, product_meta=self.product_meta,
-                        band_names=self.band_names, calibration_tables=self.calibration_tables,
-                        geo_tie_point=self.geo_tie_point, band_meta=self.band_meta,
-                        unit=mode)
+        return SarImage(
+            calibrated_bands,
+            mission=self.mission,
+            time=self.time,
+            footprint=self.footprint,
+            product_meta=self.product_meta,
+            band_names=self.band_names,
+            calibration_tables=self.calibration_tables,
+            geo_tie_point=self.geo_tie_point,
+            band_meta=self.band_meta,
+            unit=mode,
+        )
 
     def to_db(self):
-        """Convert  to decibel
-                """
+        """Convert  to decibel"""
         db_bands = []
         for band in self.bands:
-            if 'amplitude' in self.unit:
-                db_bands.append(20*np.log(band))
+            if "amplitude" in self.unit:
+                db_bands.append(20 * np.log(band))
             else:
                 db_bands.append(10 * np.log(band))
 
-        return SarImage(db_bands, mission=self.mission, time=self.time,
-                        footprint=self.footprint, product_meta=self.product_meta,
-                        band_names=self.band_names, calibration_tables=self.calibration_tables,
-                        geo_tie_point=self.geo_tie_point, band_meta=self.band_meta,
-                        unit=(self.unit+' dB'))
+        return SarImage(
+            db_bands,
+            mission=self.mission,
+            time=self.time,
+            footprint=self.footprint,
+            product_meta=self.product_meta,
+            band_names=self.band_names,
+            calibration_tables=self.calibration_tables,
+            geo_tie_point=self.geo_tie_point,
+            band_meta=self.band_meta,
+            unit=(self.unit + " dB"),
+        )
 
     def boxcar(self, kernel_size, **kwargs):
         """Simple (kernel_size x kernel_size) boxcar filter.
-            Args:
-                kernel_size(int): size of kernel
-                **kwargs: Additional arguments passed to scipy.ndimage.convolve
-            Returns:
-                Filtered image
+        Args:
+            kernel_size(int): size of kernel
+            **kwargs: Additional arguments passed to scipy.ndimage.convolve
+        Returns:
+            Filtered image
         """
 
         filter_bands = []
         for band in self.bands:
             filter_bands.append(filters.boxcar(band, kernel_size, **kwargs))
 
-        return SarImage(filter_bands, mission=self.mission, time=self.time,
-                        footprint=self.footprint, product_meta=self.product_meta,
-                        band_names=self.band_names, calibration_tables=self.calibration_tables,
-                        geo_tie_point=self.geo_tie_point, band_meta=self.band_meta,
-                        unit=self.unit)
+        return SarImage(
+            filter_bands,
+            mission=self.mission,
+            time=self.time,
+            footprint=self.footprint,
+            product_meta=self.product_meta,
+            band_names=self.band_names,
+            calibration_tables=self.calibration_tables,
+            geo_tie_point=self.geo_tie_point,
+            band_meta=self.band_meta,
+            unit=self.unit,
+        )
 
     def save(self, path):
         """Save the SarImage object in a folder at path.
-            Args:
-                path(str): Path of the folder where the the SarImage is saved.
-                        Note that the folder is created and must not exist in advance
-            Raises:
-                ValueError: There already exist a folder at path
+        Args:
+            path(str): Path of the folder where the the SarImage is saved.
+                    Note that the folder is created and must not exist in advance
+        Raises:
+            ValueError: There already exist a folder at path
         """
 
         # Check if folder exists
         if os.path.exists(path):
-            print('please give a path that is not used')
+            print("please give a path that is not used")
             raise ValueError
 
         # make folder
@@ -274,31 +339,31 @@ class SarImage:
         # save elements in separate files
 
         # product_meta
-        file_path = os.path.join(path, 'product_meta.pkl')
+        file_path = os.path.join(path, "product_meta.pkl")
         pickle.dump(self.product_meta, open(file_path, "wb"))
 
         # unit
-        file_path = os.path.join(path, 'unit.pkl')
+        file_path = os.path.join(path, "unit.pkl")
         pickle.dump(self.unit, open(file_path, "wb"))
 
         # footprint
-        file_path = os.path.join(path, 'footprint.pkl')
+        file_path = os.path.join(path, "footprint.pkl")
         pickle.dump(self.footprint, open(file_path, "wb"))
 
         # geo_tie_point
-        file_path = os.path.join(path, 'geo_tie_point.pkl')
+        file_path = os.path.join(path, "geo_tie_point.pkl")
         pickle.dump(self.geo_tie_point, open(file_path, "wb"))
 
         # band_names
-        file_path = os.path.join(path, 'band_names.pkl')
+        file_path = os.path.join(path, "band_names.pkl")
         pickle.dump(self.band_names, open(file_path, "wb"))
 
         # band_meta
-        file_path = os.path.join(path, 'band_meta.pkl')
+        file_path = os.path.join(path, "band_meta.pkl")
         pickle.dump(self.band_meta, open(file_path, "wb"))
 
         # bands
-        file_path = os.path.join(path, 'bands.pkl')
+        file_path = os.path.join(path, "bands.pkl")
         pickle.dump(self.bands, open(file_path, "wb"))
 
         # reduce size of calibration_tables list
@@ -307,13 +372,15 @@ class SarImage:
             cal = self.calibration_tables[i]
 
             # Get mask of rows in the image.
-            index_row = (0 < cal['row']) & (cal['row'] < self.bands[i].shape[0])
+            index_row = (0 < cal["row"]) & (cal["row"] < self.bands[i].shape[0])
             # Include one extra row on each side of the image to ensure interpolation
             index_row[1:] = index_row[1:] + index_row[:-1]
             index_row[:-1] = index_row[:-1] + index_row[1:]
 
             # Get mask of column in the image
-            index_column = (0 < cal['column']) & (cal['column'] < self.bands[i].shape[1])
+            index_column = (0 < cal["column"]) & (
+                cal["column"] < self.bands[i].shape[1]
+            )
             # Include one extra column on each side of the image to ensure interpolation
             index_column[1:] = index_column[1:] + index_column[:-1]
             index_column[:-1] = index_column[:-1] + index_column[1:]
@@ -327,13 +394,13 @@ class SarImage:
                 "sigma_0": cal["sigma_0"][index_row, :][:, index_column],
                 "beta_0": cal["beta_0"][index_row, :][:, index_column],
                 "gamma": cal["gamma"][index_row, :][:, index_column],
-                "dn": cal["dn"][index_row, :][:, index_column]
+                "dn": cal["dn"][index_row, :][:, index_column],
             }
 
             reduced_calibration.append(reduced_cal_i)
 
         # calibration_tables
-        file_path = os.path.join(path, 'calibration_tables.pkl')
+        file_path = os.path.join(path, "calibration_tables.pkl")
         pickle.dump(reduced_calibration, open(file_path, "wb"))
 
         return
@@ -350,11 +417,18 @@ class SarImage:
         geo_tie_point = self.geo_tie_point.pop(index)
         band_meta = self.band_meta.pop()
 
-        return SarImage([band], mission=self.mission, time=self.time,
-                        footprint=self.footprint, product_meta=self.product_meta,
-                        band_names=[name], calibration_tables=[calibration_tables],
-                        geo_tie_point=[geo_tie_point], band_meta=[band_meta],
-                        unit=self.unit)
+        return SarImage(
+            [band],
+            mission=self.mission,
+            time=self.time,
+            footprint=self.footprint,
+            product_meta=self.product_meta,
+            band_names=[name],
+            calibration_tables=[calibration_tables],
+            geo_tie_point=[geo_tie_point],
+            band_meta=[band_meta],
+            unit=self.unit,
+        )
 
     def get_band(self, index):
         """
@@ -367,8 +441,15 @@ class SarImage:
         geo_tie_point = self.geo_tie_point[index]
         band_meta = self.band_meta[index]
 
-        return SarImage([band], mission=self.mission, time=self.time,
-                        footprint=self.footprint, product_meta=self.product_meta,
-                        band_names=[name], calibration_tables=[calibration_tables],
-                        geo_tie_point=[geo_tie_point], band_meta=[band_meta],
-                        unit=self.unit)
+        return SarImage(
+            [band],
+            mission=self.mission,
+            time=self.time,
+            footprint=self.footprint,
+            product_meta=self.product_meta,
+            band_names=[name],
+            calibration_tables=[calibration_tables],
+            geo_tie_point=[geo_tie_point],
+            band_meta=[band_meta],
+            unit=self.unit,
+        )

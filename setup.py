@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
   name='Sentinel_1_python',
   url='https://github.com/aalling93/Sentinel_1_python',
-  author='Kristian Soerensen',
+  author='Kristian Aalling Soerensen',
   author_email='kaaso@space.dtu.dk',
   packages=['namees',],
   install_requires=['numpy','geopandas','mgrs','scikit-learn','scipy','cartopy','rasterio','Pillow','pandas','sentinelsat','matplotlib'],

@@ -6,7 +6,7 @@ from .filters import *
 from .Process import *
 
 ####
-# The pre_process module is HEAVILY inspired by the works of Eigil Lippert and Simon Lupemba:
-# https://github.com/eyhl/sarpy/blob/master/sarpy/s1.py
+# The pre_process module is HEAVILY dependant on the help from Eigil Lippert (DTU Space) and Simon Lupembda (EUMETSAT)
+# https://github.com/eyhl/sarpy/
 #
 ###

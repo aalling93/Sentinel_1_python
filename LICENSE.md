@@ -10,7 +10,7 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-1) cite me in your work! something like: Kristian Aalling Sørensen, 2022, kaaso@space.dtu.dk
+1) Cite me in your work! something like: Kristian Aalling Sørensen, 2022, kaaso@space.dtu.dk
 2) Get as many as possible to follow me on Github. You and your colleagues who use this at the very least. I am a like-hunter. 
 3) Star this repository, conditioned to the same as above.
 4) Maybe write me an email or two, telling me how amazing job I did?

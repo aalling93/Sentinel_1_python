@@ -104,15 +104,6 @@ def show_cross_pol_function(
     plt.show()
 
 
-
-
-
-
-
-
-
-
-
 def plot_polygon(gdf):
     """
     Plotting polygons from a gdf.

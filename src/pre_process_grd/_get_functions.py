@@ -3,7 +3,9 @@ from scipy import interpolate
 from scipy.optimize import minimize
 
 
-def get_coordinate(row, column, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints):
+def get_coordinate(
+    row, column, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints
+):
     """Get coordinate from index by interpolating grid-points
     Args:
         row(number): index of the row of interest position
@@ -25,7 +27,9 @@ def get_coordinate(row, column, lat_gridpoints, long_gridpoints, row_gridpoints,
     return lat, long
 
 
-def get_index_v1(lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints):
+def get_index_v1(
+    lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints
+):
     """Get index of a location by interpolating grid-points
     Args:
         lat(number): Latitude of the location
@@ -46,18 +50,28 @@ def get_index_v1(lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, col
     return row, column
 
 
-def get_index_v2(lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints):
+def get_index_v2(
+    lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints
+):
     """
     Same as "get_index_v1" but consistent with "get_coordinate". Drawback is that it is slower
     """
 
     # Get an initial guess
-    row_i, column_i = get_index_v1(lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints)
+    row_i, column_i = get_index_v1(
+        lat, long, lat_gridpoints, long_gridpoints, row_gridpoints, column_gridpoints
+    )
 
     # Define a loss function
     def loss_function(index):
-        lat_res, long_res = get_coordinate(index[0], index[1], lat_gridpoints, long_gridpoints, row_gridpoints,
-                                           column_gridpoints)
+        lat_res, long_res = get_coordinate(
+            index[0],
+            index[1],
+            lat_gridpoints,
+            long_gridpoints,
+            row_gridpoints,
+            column_gridpoints,
+        )
         return ((lat - lat_res) * 100) ** 2 + ((long - long_res) * 100) ** 2
 
     # Find the index where "get_coordinate" gives the closest coordinates

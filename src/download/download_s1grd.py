@@ -1,13 +1,20 @@
-
 # This next block is a bunch of Python 2/3 compatability
 
 try:
     # Python 2.x Libs
     from cookielib import MozillaCookieJar
     from StringIO import StringIO
-    from urllib2 import (HTTPCookieProcessor, HTTPError, HTTPHandler,
-                         HTTPSHandler, Request, URLError, build_opener,
-                         install_opener, urlopen)
+    from urllib2 import (
+        HTTPCookieProcessor,
+        HTTPError,
+        HTTPHandler,
+        HTTPSHandler,
+        Request,
+        URLError,
+        build_opener,
+        install_opener,
+        urlopen,
+    )
 
 except ImportError as e:
 
@@ -15,8 +22,15 @@ except ImportError as e:
     from http.cookiejar import MozillaCookieJar
     from io import StringIO
     from urllib.error import HTTPError, URLError
-    from urllib.request import (HTTPCookieProcessor, HTTPHandler, HTTPSHandler,
-                                Request, build_opener, install_opener, urlopen)
+    from urllib.request import (
+        HTTPCookieProcessor,
+        HTTPHandler,
+        HTTPSHandler,
+        Request,
+        build_opener,
+        install_opener,
+        urlopen,
+    )
 
 ###
 # Global variables intended for cross-thread modification
@@ -40,7 +54,6 @@ def get_download_name(gpd):
         pass
 
 
-
 class bulk_downloader:
     """
     Class to download Sentinel-1 files... Currectly, only GRD_HD files can be downloaded.. It takes like 10 min to add the other features, but I dont wanna now..
@@ -53,10 +66,8 @@ class bulk_downloader:
         signal.signal(signal.SIGINT, signal_handler)
         self.gdf = gdf
 
-        download_files = [get_download_name(row) for ix,row in self.gdf.iterrows()]
-        self.files  = download_files
-
-
+        download_files = [get_download_name(row) for ix, row in self.gdf.iterrows()]
+        self.files = download_files
 
         # Local stash of cookies so we don't always have to ask
         self.cookie_jar_path = os.path.join(
@@ -761,9 +772,17 @@ try:
     # Python 2.x Libs
     from cookielib import MozillaCookieJar
     from StringIO import StringIO
-    from urllib2 import (HTTPCookieProcessor, HTTPError, HTTPHandler,
-                         HTTPSHandler, Request, URLError, build_opener,
-                         install_opener, urlopen)
+    from urllib2 import (
+        HTTPCookieProcessor,
+        HTTPError,
+        HTTPHandler,
+        HTTPSHandler,
+        Request,
+        URLError,
+        build_opener,
+        install_opener,
+        urlopen,
+    )
 
 except ImportError as e:
 
@@ -771,8 +790,15 @@ except ImportError as e:
     from http.cookiejar import MozillaCookieJar
     from io import StringIO
     from urllib.error import HTTPError, URLError
-    from urllib.request import (HTTPCookieProcessor, HTTPHandler, HTTPSHandler,
-                                Request, build_opener, install_opener, urlopen)
+    from urllib.request import (
+        HTTPCookieProcessor,
+        HTTPHandler,
+        HTTPSHandler,
+        Request,
+        build_opener,
+        install_opener,
+        urlopen,
+    )
 
 ###
 # Global variables intended for cross-thread modification
