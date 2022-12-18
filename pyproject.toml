@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sentinel_1_python"
-version = "0.0.7"
+version = "0.0.8"
 authors = [
   { name="Aalling93", email="kaaso@space.dtu.dk" },
 ]
