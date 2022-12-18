@@ -8,7 +8,6 @@ mgrs #should remove later...
 scikit-learn
 scipy
 cartopy
-rasterio # should avoid in future
 Pillow
 pandas
 sentinelsat

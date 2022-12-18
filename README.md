@@ -48,7 +48,6 @@ I make no guarantees for the quality, security or anything. Use it as you wish.
 - [scikit-learn](https://github.com/scikit-learn) (should be removed in later version.. sry..)
 - [scipy](https://github.com/scipy) (should be removed in later version.. sry..)
 - [cartopy](https://github.com/cartopy) 
-- [rasterio](https://github.com/rasterio) 
 - [Pillow](https://github.com/Pillow) 
 - [pandas](https://github.com/pandas) 
 - [sentinelsat](https://github.com/sentinelsat) 

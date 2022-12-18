@@ -4,8 +4,6 @@ import warnings
 from itertools import compress
 import matplotlib
 import numpy as np
-#import rasterio  # should probabaly avoid in the future..
-#
 from . import load_data
 from ._get_functions import get_coordinate, get_index_v2
 from .Process import SarImage

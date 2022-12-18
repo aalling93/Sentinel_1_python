@@ -9,7 +9,6 @@ setup(
         "scikit-learn",
         "scipy",
         "cartopy",
-        "rasterio",
         "Pillow",
         "pandas",
         "sentinelsat",
