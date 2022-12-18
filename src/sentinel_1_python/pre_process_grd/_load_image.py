@@ -2,9 +2,9 @@ import os
 import pickle
 import warnings
 from itertools import compress
-
+import matplotlib
 import numpy as np
-import rasterio  # should probabaly avoid in the future..
+#import rasterio  # should probabaly avoid in the future..
 
 from . import load_data
 from ._get_functions import get_coordinate, get_index_v2
@@ -58,7 +58,7 @@ def s1_load(path, polarisation="all", location=None, size=None):
     with warnings.catch_warnings():  # Ignore the "NotGeoreferencedWarning" when opening the tiff
         warnings.simplefilter("ignore")
         measurement_temp = [
-            rasterio.open(os.path.join(measurement_path, file)) for file in tiff_files
+            matplotlib.open(os.path.join(measurement_path, file)) for file in tiff_files
         ]
 
     # Check if polarisation is given
