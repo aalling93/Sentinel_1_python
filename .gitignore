@@ -139,3 +139,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+How_to_make_pypi_package.md
