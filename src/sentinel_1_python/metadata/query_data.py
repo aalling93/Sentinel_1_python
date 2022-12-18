@@ -78,3 +78,24 @@ def get_s1_grd_metadata_area(
     products_df = api.to_geodataframe(products)
     products_df = add_mgcs(products_df)
     return products_df
+
+
+
+def get_s2_l2a_metadata_area(
+    footprint,
+    username,
+    password,
+    start_data: str = "20151023",
+    end_date: str = "20151025",
+):
+    # getting metadata s1 slc func
+    api = api = SentinelAPI(username, password, "https://scihub.copernicus.eu/dhus/")
+    products = api.query(
+        footprint,
+        date=(start_data, end_date),
+        producttype="Level-2A",
+        platformname="Sentinel-2",
+    )
+    products_df = api.to_geodataframe(products)
+
+    return products_df

@@ -60,6 +60,12 @@ class Sentinel_metadata:
             )
             self.sensor = "sentinel_2_l1c"
 
+        elif sensor.lower() in ["s2_l2a", "sentinel2_l2a", "sentinel-2_l2a"]:
+            self.products_df = get_s2_l2a_metadata_area(
+                self.bbox, self.USERNAME, self.PASSWORD, start_data, end_date
+            )
+            self.sensor = "sentinel_2_l2a"
+
         self.org_products_df = self.products_df
 
         return self
