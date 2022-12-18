@@ -1,6 +1,6 @@
 from scipy import ndimage
 import numpy as np
-
+#
 
 def boxcar(img, kernel_size, **kwargs):
     """Simple (kernel_size x kernel_size) boxcar filter.
