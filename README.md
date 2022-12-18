@@ -43,7 +43,6 @@ I make no guarantees for the quality, security or anything. Use it as you wish.
 
 - [numpy](https://github.com/numpy) 
 - [geopandas](https://github.com/geopandas) 
-- [gdal](https://github.com/geopandas) 
 - [mgrs](https://github.com/mgrs)  (should be removed in later version.. sry..)
 - [scikit-learn](https://github.com/scikit-learn) (should be removed in later version.. sry..)
 - [scipy](https://github.com/scipy) (should be removed in later version.. sry..)

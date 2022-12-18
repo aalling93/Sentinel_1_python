@@ -4,7 +4,6 @@ setup(
     install_requires=[
         "numpy",
         "geopandas",
-        "gdal",
         "mgrs",
         "scikit-learn",
         "scipy",
